@@ -1,1 +1,21 @@
 
+/*
+EQUIPO V-03
+ANGEL TABUENCA
+CARLOS ASENSIO
+MERCEDES ANDUEZA
+DESCRIPCIÓN
+*/
+
+void validaAngulo (double theta, char utheta, bool &b, double &a){
+}
+double fase (double s, double r, double &phi0){
+return
+}
+double normaliza (double theta){
+return
+}
+void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
+}
+void rungekutta (double aplha, double &v, double &thetaT, double delta){
+}
