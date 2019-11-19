@@ -10,14 +10,34 @@ CARLOS ASENSIO
 MERCEDES ANDUEZA
 DESCRIPCIÓN
 */
+const double pi=(4*atan(1));
 
 void validaAngulo (double theta, char utheta, bool &b, double &a){
+if (utheta==s)
+    theta=theta*pi/180
+    b=false;
+else if (utheta==r)
+        b=true;
+ if (utheta!=r && utheta!=s) 
+    cout<<Unidades de theta erroneas<<endl;
 }
 double fase (double s, double r, double &phi0){
+double a, b;
+if(s>=1)
+  phi0=pi/2;
+  s=a;
+else if (s<=-1)
+    phi0=-pi/2;
+    s=b;
+if (s!=a && s!=b)
+  phi0=asin (s);
 return
 }
 double normaliza (double theta){
-return
+double n, thetaprima;
+n=(theta+pi)/2/pi;
+thetaprima=theta-2*n*pi
+return thetaprima;
 }
 void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
 }
