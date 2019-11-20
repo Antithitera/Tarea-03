@@ -11,26 +11,43 @@ MERCEDES ANDUEZA
 DESCRIPCIÓN
 */
 
-double fd, fcout, fsimul, theta0, omega0, alpha, thetaM, tau, k,td, tcout, tsimul; //NOTA: omega0 es la velocidad angular inicial, theta^punto_0.
-double const epsilon=pow(10,-7);
+double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, k,td, tcout, tsimul; //NOTA: omega0 es la velocidad angular inicial, theta^punto_0.
+const double pi=(4*atan(1)), epsilon=pow(10,-7);
 char utheta, uomega;
 
-void validaAngulo (double theta0, char utheta, bool &b, double &theta_0){//Devuelve theta0 en radianes -> USAR theta_0
-
+void validaAngulo (double theta_0, char utheta, bool &b, double &theta0){//Devuelve theta_0 en radianes -> USAR theta0
+    if (utheta=='s'){
+        theta0=theta_0*pi/180;
+        b=false;}
+    else if (utheta=='r'){
+        b=true;
+        theta0=theta_0;}
 }
 
-void validaVelocidad (double theta0, char utheta, bool &b, double &omega_0){//Devuelve omega0 en radianes -> USAR omega_0
-
+void validaVelocidad (double omega_0, char uomega, bool &b, double &omega0){//Devuelve omega_0 en radianes -> USAR omega0
+if (uomega=='s'){
+    omega0=omega_0*pi/180;
+    b=false;}
+else if (uomega=='r'){
+    b=true;
+    omega0=omega_0;}
 }
 
-double fase (double s, double r, double &phi0){
-
-return
+double fase (double s, double r, double &phi0){//Falta terminar el else para que cos() tenga el mismo signo que r
+    if(s>=1)   
+        return pi/2;
+    else if (s<=-1)   
+        return -pi/2;
+    else {
+      phi0=asin(s);
+    }
 }
 
-double normaliza (double theta){
-
-return
+double normaliza (double theta){//Hay que normalizar los ángulos mostrados por pantalla
+    double n, thetaprima;
+    n=(theta+pi)/(2*pi);
+    thetaprima=theta-2*n*pi;
+return thetaprima;
 }
 
 void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
@@ -38,20 +55,20 @@ void analisis (double alpha, double theta0, double v0, double epsilon, double &t
 }
 
 void rungekutta (double aplha, double &v, double &thetaT, double delta){
-
-}
 //Aquí tienen que estar también los cout cada tcout iteraciones y una función si la energía es menor que 2mgl.
+}
+
 int main(){
-    cin>>fd>>fcout>>fsimul>>theta0>>utheta>>omega0>>uomega>>alpha;
-    //Nos aseguremos de que theta y omega estén en radianes
-    validaAngulo;
-    validaVelocidad;
-    //Mensaje de error si alguna unidad está mal, b==false viene de los subalgoritmos validaAngulo y validaVelocidad
-    if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||b==false) 
+    cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
+    //Mensaje de error si alguna unidad está mal
+    if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||(utheta!='r' && utheta!='s')||(uomega!='r' && uomega!='s'))
         cout << "HAY ALGÚN ERROR, ALPHA Y LOS FACTORES DEL PERIODO DEBEN SER POSITIVOS Y LAS UNIDADES DEL ÁNGULO Y LA VELOCIDAD DEBEN SER 'r' O 's'.";
-        
+    //Nos aseguremos de que theta y omega estén en radianes
+    validaAngulo(theta_0,utheta,b,theta0);
+    validaVelocidad(omega_0,uomega,b,omega0);
+
     else {
-        analisis(aplpha,theta_0,omega_0,epsilon,thetaM,tau,k);
+        analisis(aplpha,theta0,omega0,epsilon,thetaM,tau,k);
         //Calculamos los tiempos representativos del péndulo gracias a la tau que calcula el subalgoritmo analisis
         td=fd*tau;
         tcout=fd*tau;
@@ -61,3 +78,4 @@ int main(){
     }
 return 0;
 }
+
