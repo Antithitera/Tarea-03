@@ -26,11 +26,11 @@ void validaAngulo (double theta_0, char utheta, bool &b, double &theta0){//Devue
 
 void validaVelocidad (double omega_0, char uomega, bool &b, double &omega0){//Devuelve omega_0 en radianes -> USAR omega0
 if (uomega=='s'){
-    omega0=omega_0*pi/180;
+    omega_0=omega_0*pi/180;
     b=false;}
 else if (uomega=='r'){
     b=true;
-    omega0=omega_0;}
+    omega_0=omega_0;}
 }
 
 double fase (double s, double r, double &phi0){//Falta terminar el else para que cos() tenga el mismo signo que r
@@ -50,8 +50,55 @@ double normaliza (double theta){//Hay que normalizar los ángulos mostrados por 
 return thetaprima;
 }
 
-void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
-
+void analisis (double alpha, double theta_0, double omega_0, double epsilon, double &thetaM, double &tau, int &k){
+double omega, m, g, l;
+int n, i;
+double a[n];
+if (E>2mgl){
+    k=-1;
+    tehtaM=pi;
+    A=sqrt(omega_0*omega_0+2*alpha*(1-cos(theta_0)))/2;
+    r=sqrt(alpha)/A;
+    tau_0=pi/A;
+    Z=0;
+    a[0]=1
+    for(i=0;i<=n;i++){
+    j=i+1
+    a[j]=pow((2*j-1)*r/2/j,2)
+    Z=a[i]+Z;
+    }
+    tau=tau_0*Z;//denomino a lo que en los apuntes llama T0 como tau_0 porque dice que en estos casos tau es el periodo
+}
+else if (E<2mgl){
+    thetaM=acos(cos(theta_0)-pow(omega_0,2));
+    k=1;
+    tau_0=2*pi/2/alpha;
+    r=sin(thetaM/2);
+    Z=0;
+    a[0]=1
+    for(i=0;i<=n;i++){
+    j=i+1
+    a[j]=pow((2*j-1)*r/2/j,2)
+    Z=a[i]+Z;
+    }
+    tau=tau_0*Z;
+}
+else if (E=2mgl && omega_0>=0){
+    theta=0.999*pi;
+    thetaM=pi;
+    U=tan(omega/4+pi/4);
+    C=1/tan(omega_0/4+pi/4);
+    tau=ln(C*U)/sqrt(alpha);   
+    k=0;
+}
+else{
+    theta=-0.999*pi;
+    thetaM=-pi;
+    U=tan(omega/4+pi/4);
+    C=1/tan(omega_0/4+pi/4);
+    tau=-ln(C*U)/sqrt(alpha);
+    k=0;
+}
 }
 
 void rungekutta (double aplha, double &v, double &thetaT, double delta){
