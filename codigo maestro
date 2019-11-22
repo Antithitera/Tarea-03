@@ -10,10 +10,7 @@ MERCEDES ANDUEZA
 
 DESCRIPCIÓN
 */
-
-double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, k,td, tcout, tsimul; //NOTA: omega0 es la velocidad angular inicial, theta^punto_0.
 const double pi=(4*atan(1)), epsilon=pow(10,-7);
-char utheta, uomega;
 
 void validaAngulo (double theta_0, char utheta, bool &b, double &theta0){//Devuelve theta_0 en radianes -> USAR theta0
     if (utheta=='s'){
@@ -106,6 +103,8 @@ void rungekutta (double aplha, double &v, double &thetaT, double delta){
 }
 
 int main(){
+    double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, k,td, tcout, tsimul; //NOTA: omega0 es la velocidad angular inicial, theta^punto_0.
+    char utheta, uomega;
     cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
     //Mensaje de error si alguna unidad está mal
     if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||(utheta!='r' && utheta!='s')||(uomega!='r' && uomega!='s'))
