@@ -42,5 +42,29 @@ return thetaprima;
 }
 void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
 }
-void rungekutta (double aplha, double &v, double &thetaT, double delta){
+void rungekutta (double aplha, double &w, double &thetaT, double delta){
+double sumathetaT;
+doule sumaw;
+double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
+
+  thetaA=w*delta;
+  wA=-alpha*seno(thetaT)*delta;
+  
+  thetaB=(w+wA/2)*delta;
+  WB=-alpha*seno(thetaT+thetaA/2)*delta;
+  
+  thetac=(w+wB/2)*delta;
+  wC=-alpha*seno(thetaT+thetaB/2)*delta;
+  
+  thetaD=(w+wC)*delta;
+  wC=-alpha*seno(thetaT+thetaC)*delta;     */Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
+  
+  
+  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
+  w=w+wA/6+wB/3+wC/3+wD/6
+  
+  
+  
+  
+
 }
