@@ -21,17 +21,14 @@ void validaAngulo (double theta, char utheta, bool &b, double &a){
   else (utheta!=r && utheta!=s) 
     cout<<Unidades de theta erroneas<<endl;
   }
-double fase (double s, double r, double &phi0){
-double a, b;
-  if(s>=1){
-    phi0=pi/2;
-   s=a;}
-  else if (s<=-1){
-    phi0=-pi/2;
-    s=b;}
-  else (s!=a && s!=b)
-  phi0=asin (s);
-return
+double fase (double s, double r, double &phi0){//Falta terminar el else para que cos() tenga el mismo signo que r
+    if(s>=1)   
+        return pi/2;
+    else if (s<=-1)   
+        return -pi/2;
+    else {
+      if(cosphi0=asin(s);
+    }
 }
 double normaliza (double theta){
 double n, thetaprima;
