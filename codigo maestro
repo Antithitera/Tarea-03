@@ -56,18 +56,55 @@ int i;
       r=sin(thetaM/2);
       Prc=log(epsilon*(1-pow(r,2))/2*log(r);
       tau=T0;
-       acum=1
-         an=1
+       acum=1;
+         an=1;
          
          for(i=1;i>=Prc;i++){
-            term=(2*i-1)*r/(2*i)
+            term=(2*i-1)*r/(2*i);
         
-             anmas=((pow(term,2)*an)
-             an=anmas
-             acum=acum+anmas     
+             anmas=((pow(term,2)*an);
+             an=anmas;
+             acum=acum+anmas ;    
          }
-         tau=T0*acum
+         tau=T0*acum;
   }
+  else if(E==2*m*g*l){
+      k=0;
+      
+      C=1/tan(theta0/4+pi/4);,
+      tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));  */no estoy segura de que t(theta) de los papeles sea tau
+      if (w0<0){
+        tau=-tau;  
+        thetaM=-pi;}
+      else thetaM=pi;
+  }
+  
+ else{
+      double A;
+      k=1;
+      
+      thetaM=pi
+      
+      T0=pi/A;
+      r=sqrt(alpha)/A;
+      A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
+      Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+      tau=T0;
+       acum=1;
+         an=1;
+         
+         for(i=1;i>=Prc;i++){
+            term=(2*i-1)*r/(2*i);
+        
+             anmas=((pow(term,2)*an);
+             an=anmas;
+             acum=acum+anmas ;    
+         }
+         tau=T0*acum;
+  }
+  
+  
+  
 }
 
 void rungekutta (double aplha, double &w, double &thetaT, double delta){
