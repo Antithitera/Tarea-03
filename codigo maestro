@@ -38,28 +38,57 @@ double normaliza (double theta){
 return thetaprima;
 }
 
-void analisis (double alpha, double theta0, double v0, double epsilon, double &thetaM, double &tau, int &k){
+void analisis (double alpha, double theta0, double w0, double epsilon, double &thetaM, double &tau, int &k){
+double E;
+double T0;
+double r;
+double Prc;
+double an;double anmas;double acum;
+int i;
+
+  if(E<2*m*g*l){
+  
+      k=-1;
+      
+      thetaM=acos(cos(theta0)-pow(w0,2)/(2*alpha);
+      
+      T0=2*pi/squrt(alpha);
+      r=sin(thetaM/2);
+      Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+      tau=T0;
+       acum=1
+         an=1
+         
+         for(i=1;i>=Prc;i++){
+            term=(2*i-1)*r/(2*i)
+        
+             anmas=((pow(term,2)*an)
+             an=anmas
+             acum=acum+anmas     
+         }
+         tau=T0*acum
+  }
 }
 
 void rungekutta (double aplha, double &w, double &thetaT, double delta){
-double sumathetaT;
-doule sumaw;
+
 double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
 
   thetaA=w*delta;
-  wA=-alpha*seno(thetaT)*delta;
+  wA=-alpha*sin(thetaT)*delta;
   
   thetaB=(w+wA/2)*delta;
-  WB=-alpha*seno(thetaT+thetaA/2)*delta;
+  WB=-alpha*sin(thetaT+thetaA/2)*delta;
   
   thetac=(w+wB/2)*delta;
-  wC=-alpha*seno(thetaT+thetaB/2)*delta;
+  wC=-alpha*sin(thetaT+thetaB/2)*delta;
   
   thetaD=(w+wC)*delta;
-  wC=-alpha*seno(thetaT+thetaC)*delta;//Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
+  wD=-alpha*sin(thetaT+thetaC)*delta;//Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
   
   
-  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thet
+  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
+  w=w+wA/6+wB/3+wC/3+wD/6;
   }
   
   int main(){//Cambiar lo de unidades mal
