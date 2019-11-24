@@ -11,100 +11,93 @@ DESCRIPCIÓN
 */
 const double pi=(4*atan(1));
 
-void validaAngulo (double theta, char utheta, bool &b, double &a){ //Cambiar a "case"s y el b=false es para cuando es distinto de r o s
-  if (utheta==s){
-    theta=theta*pi/180
-    b=false;}
-  else if (utheta==r)
-        b=true;
-  else (utheta!=r && utheta!=s) 
-    cout<<Unidades de theta erroneas<<endl;
+void validaAngulo (double theta, char utheta, bool &b, double &theta0){
+  switch (utheta){
+  case 'r': b=true; theta0=theta; break;
+  case 's': b=true; theta0=theta*pi/180; break;
+  default: b=false;
   }
+}
+
+void validaVelocidad (double omega, char uomega, bool &b, double &omega0){ 
+  switch (uomega){
+  case 'r': b=true; omega0=omega; break;
+  case 's': b=true; omega0=omega*pi/180; break;
+  default: b=false;
+  }
+}
   
-double fase (double s, double r, double &phi0){//Falta terminar el else para que cos() tenga el mismo signo que r
+double fase (double s, double r, double &phi0){
     if(s>=1)   
         return pi/2;
     else if (s<=-1)   
         return -pi/2;
     else {
-      if(cosphi0=asin(s);//¿Esto está bien?
+      if(acos(r)<0) phi0=-asen(s);
+      else phi0=asen(s);
     }
 }
 
 double normaliza (double theta){
-  double n, thetaprima;
-  n=(theta+pi)/2/pi;
-  thetaprima=floor(theta-2*n*pi) 
-return thetaprima;
+    double n;
+    n=floor((theta+pi)/(2*pi));
+return theta-2*n*pi;
 }
 
 void analisis (double alpha, double theta0, double w0, double epsilon, double &thetaM, double &tau, int &k){
-double E;
-double T0;
-double r;
-double Prc;
-double an;double anmas;double acum;
-int i;
-
-  if(E<2*m*g*l){
-  
-      k=-1;
-      
-      thetaM=acos(cos(theta0)-pow(w0,2)/(2*alpha);
-      
-      T0=2*pi/squrt(alpha);
-      r=sin(thetaM/2);
-      Prc=log(epsilon*(1-pow(r,2))/2*log(r);
-      tau=T0;
-       acum=1;
-         an=1;
-         
-         for(i=1;i>=Prc;i++){
+    double T0, r, Prc, an, anmas, acum;
+    if(pow(omega,2)/(2*alpha)-cos(theta0)<1){
+          k=-1;
+          
+          thetaM=acos(cos(theta0)-pow(w0,2)/(2*alpha);
+          
+          T0=2*pi/squrt(alpha);
+          r=sin(thetaM/2);
+          Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+          tau=T0;
+          acum=1;
+          an=1;
+          for(int i=1;i>=Prc;i++){
             term=(2*i-1)*r/(2*i);
-        
-             anmas=((pow(term,2)*an);
-             an=anmas;
-             acum=acum+anmas ;    
-         }
-         tau=T0*acum;
-  }
-  else if(E==2*m*g*l){
-      k=0;
+            anmas=((pow(term,2)*an);
+            an=anmas;
+            acum=acum+anmas ;    
+          }
+          tau=T0*acum;
+      }
+      else if(pow(omega,2)/(2*alpha)-cos(theta0)==1){
+          k=0;
+          
+          C=1/tan(theta0/4+pi/4);,
+          tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));  */no estoy segura de que t(theta) de los papeles sea tau
+          if (w0<0){
+            tau=-tau;  
+            thetaM=-pi;}
+          else thetaM=pi;
+      }
       
-      C=1/tan(theta0/4+pi/4);,
-      tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));  */no estoy segura de que t(theta) de los papeles sea tau
-      if (w0<0){
-        tau=-tau;  
-        thetaM=-pi;}
-      else thetaM=pi;
-  }
-  
- else{
-      double A;
-      k=1;
-      
-      thetaM=pi
-      
-      T0=pi/A;
-      r=sqrt(alpha)/A;
-      A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
-      Prc=log(epsilon*(1-pow(r,2))/2*log(r);
-      tau=T0;
-       acum=1;
-         an=1;
-         
-         for(i=1;i>=Prc;i++){
-            term=(2*i-1)*r/(2*i);
-        
-             anmas=((pow(term,2)*an);
-             an=anmas;
-             acum=acum+anmas ;    
-         }
-         tau=T0*acum;
-  }
-  
-  
-  
+     else{
+          double A;
+          k=1;
+          
+          thetaM=pi
+          
+          T0=pi/A;
+          r=sqrt(alpha)/A;
+          A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
+          Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+          tau=T0;
+          acum=1;
+          an=1;
+             
+             for(int i=1;i>=Prc;i++){
+                term=(2*i-1)*r/(2*i);
+                anmas=((pow(term,2)*an);
+                an=anmas;
+                acum=acum+anmas ;    
+             }
+             tau=T0*acum;
+      }
 }
 
 void rungekutta (double aplha, double &w, double &thetaT, double delta){
@@ -128,26 +121,4 @@ double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
   w=w+wA/6+wB/3+wC/3+wD/6;
   }
   
-  int main(){//Cambiar lo de unidades mal
-    double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, k,td, tcout, tsimul; //NOTA: omega0 es la velocidad angular inicial, theta^punto_0.
-    char utheta, uomega;
-    cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
-    //Mensaje de error si alguna unidad está mal
-    if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||(utheta!='r' && utheta!='s')||(uomega!='r' && uomega!='s'))
-        cout << "HAY ALGÚN ERROR, ALPHA Y LOS FACTORES DEL PERIODO DEBEN SER POSITIVOS Y LAS UNIDADES DEL ÁNGULO Y LA VELOCIDAD DEBEN SER 'r' O 's'.";
-    //Nos aseguremos de que theta y omega estén en radianes
-    validaAngulo(theta_0,utheta,b,theta0);
-    validaVelocidad(omega_0,uomega,b,omega0);
-
-    else {
-        analisis(aplpha,theta0,omega0,epsilon,thetaM,tau,k);
-        //Calculamos los tiempos representativos del péndulo gracias a la tau que calcula el subalgoritmo analisis
-        td=fd*tau;
-        tcout=fd*tau;
-        tsimul=fsimul*tau;
-        //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
-
-    }
-return 0;
-}
-
+int main(){
