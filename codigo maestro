@@ -11,30 +11,28 @@ DESCRIPCIÓN
 */
 const double pi=(4*atan(1));
 
-void validaAngulo (double theta, char utheta, bool &b, double &theta0){
+void validaAngulo (double theta_0, char utheta, bool &b, double &theta){
   switch (utheta){
-  case 'r': b=true; theta0=theta; break;
-  case 's': b=true; theta0=theta*pi/180; break;//Pasamos de grados a radianes
+  case 'r': b=true; theta=theta_0; break;
+  case 's': b=true; theta=theta_0*pi/180; break;//Pasamos de grados a radianes
   default: b=false;
   }
 }
 
-void validaVelocidad (double omega, char uomega, bool &b, double &omega0){
+void validaVelocidad (double omega_0, char uomega, bool &b, double &w){
   switch (uomega){
-  case 'r': b=true; omega0=omega; break;
-  case 's': b=true; omega0=omega*pi/180; break;//Pasamos de grados a radianes
+  case 'r': b=true; w=omega_0; break;
+  case 's': b=true; w=omega_0*pi/180; break;//Pasamos de grados a radianes
   default: b=false;
   }
 }
 
-double fase (double s, double r, double &phi0){
-    if(s>=1)
-        return pi/2;
-    else if (s<=-1)
-        return -pi/2;
+void fase (double s, double r, double &phi0){
+    if(s>=1)   phi0=pi/2;
+    else if (s<=-1)   phi0=-pi/2;
     else {
-      if(acos(r)<0) phi0=-asen(s);//Hacemos esto para que phi0 tenga el mismo signo que el cos(r)
-      else phi0=asen(s);
+      if(acos(r)<0) phi0=-asin(s);//Hacemos esto para que phi0 tenga el mismo signo que el cos(r)
+      else phi0=asin(s);
     }
 }
 
@@ -44,54 +42,54 @@ double normaliza (double theta){
 return theta-2*n*pi;
 }
 
-void analisis (double alpha, double theta0, double w0, double epsilon, double &thetaM, double &tau, int &k){
-    double T0, r, Prc, an, anmas, acum;
-    if(pow(w0,2)/(2*alpha)-cos(theta0)<1){
+void analisis (double alpha, double theta, double w, double epsilon, double &thetaM, double &tau, int &k){
+    double T0, r, Prc, an, anmas, acum, term, C;
+    if(pow(w,2)/(2*alpha)-cos(theta)<1){
           k=-1;
 
-          thetaM=acos(cos(theta0)-pow(w0,2)/(2*alpha);
+          thetaM=acos(cos(theta))-pow(w,2)/(2*alpha);
 
-          T0=2*pi/squrt(alpha);
+          T0=2*pi/sqrt(alpha);
           r=sin(thetaM/2);
-          Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+          Prc=log(epsilon*(1-pow(r,2)))/2*log(r);
           tau=T0;
           acum=1;
           an=1;
           for(int i=1;i>=Prc;i++){
             term=(2*i-1)*r/(2*i);
-            anmas=((pow(term,2)*an);
+            anmas=pow(term,2)*an;
             an=anmas;
             acum=acum+anmas ;
           }
           tau=T0*acum;
       }
-      else if(pow(w0,2)/(2*alpha)-cos(theta0)==1){
+      else if(pow(w,2)/(2*alpha)-cos(theta)==1){
           k=0;
 
-          C=1/tan(theta0/4+pi/4);,
-          tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));
-          if (w0<0){
+          C=1/tan(theta/4+pi/4);
+          tau=1/sqrt(alpha)*log(C*tan(theta/4+pi/4));
+          if (w<0){
             tau=-tau;
             thetaM=-pi;}
           else thetaM=pi;
       }
 
      else{
-          double A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
+          double A=sqrt(pow(w,2))+2*alpha*(1-cos(theta))/2;
           k=1;
 
-          thetaM=pi
+          thetaM=pi;
 
           T0=pi/A;
           r=sqrt(alpha)/A;
-          Prc=log(epsilon*(1-pow(r,2))/2*log(r);
+          Prc=log(epsilon*(1-pow(r,2)))/2*log(r);
           tau=T0;
           acum=1;
           an=1;
 
              for(int i=1;i>=Prc;i++){
                 term=(2*i-1)*r/(2*i);
-                anmas=((pow(term,2)*an);
+                anmas=((pow(term,2))*an);
                 an=anmas;
                 acum=acum+anmas ;
              }
@@ -99,49 +97,73 @@ void analisis (double alpha, double theta0, double w0, double epsilon, double &t
       }
 }
 
-void rungekutta (double aplha, double &w, double &thetaT, double delta){
-
-double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
+void rungekutta (double alpha, double &w, double &theta, double delta){
+double  thetaA, thetaB, thetaC, thetaD, wA, wB, wC, wD;
 
   thetaA=w*delta;
-  wA=-alpha*sin(thetaT)*delta;
+  wA=-alpha*sin(theta)*delta;
 
   thetaB=(w+wA/2)*delta;
-  WB=-alpha*sin(thetaT+thetaA/2)*delta;
+  wB=-alpha*sin(theta+thetaA/2)*delta;
 
-  thetac=(w+wB/2)*delta;
-  wC=-alpha*sin(thetaT+thetaB/2)*delta;
+  thetaC=(w+wB/2)*delta;
+  wC=-alpha*sin(theta+thetaB/2)*delta;
 
   thetaD=(w+wC)*delta;
-  wD=-alpha*sin(thetaT+thetaC)*delta;//Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
+  wD=-alpha*sin(theta+thetaC)*delta;
 
 
-  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
+  theta=theta+thetaA/6+thetaB/3+thetaC/3+thetaD/6;
   w=w+wA/6+wB/3+wC/3+wD/6;
   }
 
 int main(){
-    double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau,td, tcout, tsimul, epsilon=pow(10,-7);
+    double fd, fcout, fsimul, theta_0, theta, omega_0, w, alpha, thetaM, phi0, tau, td, tcout, tsimul, t=0, i=0, epsilon=pow(10,-7);
     int k;
     char utheta, uomega;
+    bool b;
     cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
 
     //Nos aseguremos de que theta y omega estén en radianes
-    validaAngulo(theta_0,utheta,b,theta0);
-    validaVelocidad(omega_0,uomega,b,omega0);
+    validaAngulo(theta_0,utheta,b,theta);
+    validaVelocidad(omega_0,uomega,b,w);
 
     //Mensaje de error si alguna unidad está mal
     if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||b==false)   cout << "HAY ALGÚN ERROR";
     else {
-
-        analisis(aplpha,theta0,omega0,epsilon,thetaM,tau,k);
+        analisis(alpha,theta,w,epsilon,thetaM,tau,k);
         //Calculamos los tiempos representativos del péndulo gracias a la tau que calcula el subalgoritmo analisis
         td=fd*tau;
-        tcout=fd*tau;
+        tcout=fcout*tau;
         tsimul=fsimul*tau;
-        //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
+        cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<endl;//Mostraos las condiciones iniciales
 
-    }
+        //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
+        fase(theta, w, phi0);//Nos devuelve un phi0 que lo usaremos en el caso especial para calcular thetaseno
+
+        if (pow(w,2)/(2*alpha)-cos(theta)<1){//Calculamos un caso especial, en el que hay que mostar además otro ángulo
+            double thetaseno;
+            while(t<=tsimul){
+                for (i;i<tcout;i=i+td){
+                rungekutta(alpha, w, theta, td);
+                thetaseno=thetaM*(2*pi*t/tau+phi0);//Aquí hay que usar fase() pero no estoy seguro de si así
+                t=t+td;
+                }
+            cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<"\t"<<thetaseno<<endl;
+            i=0;
+            }
+        }
+        else {//Este es el caso genérico
+          while(t<=tsimul){
+            for (i;i<tcout;i=i+td){
+            rungekutta(alpha, w, theta, td);
+            t=t+td;
+            }
+        cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<endl;
+        i=0;
+        }
+
+        }
 return 0;
 }
-
+}
