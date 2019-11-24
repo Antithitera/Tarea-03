@@ -14,26 +14,26 @@ const double pi=(4*atan(1));
 void validaAngulo (double theta, char utheta, bool &b, double &theta0){
   switch (utheta){
   case 'r': b=true; theta0=theta; break;
-  case 's': b=true; theta0=theta*pi/180; break;
+  case 's': b=true; theta0=theta*pi/180; break;//Pasamos de grados a radianes
   default: b=false;
   }
 }
 
-void validaVelocidad (double omega, char uomega, bool &b, double &omega0){ 
+void validaVelocidad (double omega, char uomega, bool &b, double &omega0){
   switch (uomega){
   case 'r': b=true; omega0=omega; break;
-  case 's': b=true; omega0=omega*pi/180; break;
+  case 's': b=true; omega0=omega*pi/180; break;//Pasamos de grados a radianes
   default: b=false;
   }
 }
-  
+
 double fase (double s, double r, double &phi0){
-    if(s>=1)   
+    if(s>=1)
         return pi/2;
-    else if (s<=-1)   
+    else if (s<=-1)
         return -pi/2;
     else {
-      if(acos(r)<0) phi0=-asen(s);
+      if(acos(r)<0) phi0=-asen(s);//Hacemos esto para que phi0 tenga el mismo signo que el cos(r)
       else phi0=asen(s);
     }
 }
@@ -46,11 +46,11 @@ return theta-2*n*pi;
 
 void analisis (double alpha, double theta0, double w0, double epsilon, double &thetaM, double &tau, int &k){
     double T0, r, Prc, an, anmas, acum;
-    if(pow(omega,2)/(2*alpha)-cos(theta0)<1){
+    if(pow(w0,2)/(2*alpha)-cos(theta0)<1){
           k=-1;
-          
+
           thetaM=acos(cos(theta0)-pow(w0,2)/(2*alpha);
-          
+
           T0=2*pi/squrt(alpha);
           r=sin(thetaM/2);
           Prc=log(epsilon*(1-pow(r,2))/2*log(r);
@@ -61,87 +61,87 @@ void analisis (double alpha, double theta0, double w0, double epsilon, double &t
             term=(2*i-1)*r/(2*i);
             anmas=((pow(term,2)*an);
             an=anmas;
-            acum=acum+anmas ;    
+            acum=acum+anmas ;
           }
           tau=T0*acum;
       }
-      else if(pow(omega,2)/(2*alpha)-cos(theta0)==1){
+      else if(pow(w0,2)/(2*alpha)-cos(theta0)==1){
           k=0;
-          
+
           C=1/tan(theta0/4+pi/4);,
-          tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));  */no estoy segura de que t(theta) de los papeles sea tau
+          tau=1/sqrt(alpha)*ln(C*tan(theta/4+pi/4));
           if (w0<0){
-            tau=-tau;  
+            tau=-tau;
             thetaM=-pi;}
           else thetaM=pi;
       }
-      
+
      else{
-          double A;
+          double A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
           k=1;
-          
+
           thetaM=pi
-          
+
           T0=pi/A;
           r=sqrt(alpha)/A;
-          A=sqrt(pow(w0,2)+2*alpha*(1-cos(theta0))/2;
           Prc=log(epsilon*(1-pow(r,2))/2*log(r);
           tau=T0;
           acum=1;
           an=1;
-             
+
              for(int i=1;i>=Prc;i++){
                 term=(2*i-1)*r/(2*i);
                 anmas=((pow(term,2)*an);
                 an=anmas;
-                acum=acum+anmas ;    
+                acum=acum+anmas ;
              }
              tau=T0*acum;
       }
 }
 
-void rungekutta (double aplha, double delta, double &w, double &theta ){
+void rungekutta (double aplha, double &w, double &thetaT, double delta){
 
-double  thetaA, thetaB, thetaC, thetaD, wA, wB, wC, wD;
+double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
 
   thetaA=w*delta;
-  wA=-alpha*sin(theta)*delta;
-  
+  wA=-alpha*sin(thetaT)*delta;
+
   thetaB=(w+wA/2)*delta;
-  WB=-alpha*sin(theta+thetaA/2)*delta;
-  
-  thetaC=(w+wB/2)*delta;
-  wC=-alpha*sin(theta+thetaB/2)*delta;
-  
+  WB=-alpha*sin(thetaT+thetaA/2)*delta;
+
+  thetac=(w+wB/2)*delta;
+  wC=-alpha*sin(thetaT+thetaB/2)*delta;
+
   thetaD=(w+wC)*delta;
-  wD=-alpha*sin(theta+thetaC)*delta;
-  
-  theta=theta+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
+  wD=-alpha*sin(thetaT+thetaC)*delta;//Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
+
+
+  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
   w=w+wA/6+wB/3+wC/3+wD/6;
   }
-  
+
 int main(){
-double fd, fcout, fsimul, theta0, theta_0, theta, omega0, omega_0, w, alpha, thetaM, tau, k, td, tcout, tsimul, epsilon=pow(10,-7);
+    double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau,td, tcout, tsimul, epsilon=pow(10,-7);
+    int k;
     char utheta, uomega;
     cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
-    
+
     //Nos aseguremos de que theta y omega estén en radianes
     validaAngulo(theta_0,utheta,b,theta0);
     validaVelocidad(omega_0,uomega,b,omega0);
-    
+
     //Mensaje de error si alguna unidad está mal
     if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||b==false)   cout << "HAY ALGÚN ERROR";
     else {
-        
+
         analisis(aplpha,theta0,omega0,epsilon,thetaM,tau,k);
         //Calculamos los tiempos representativos del péndulo gracias a la tau que calcula el subalgoritmo analisis
         td=fd*tau;
         tcout=fd*tau;
         tsimul=fsimul*tau;
         //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
-        theta=theta0;
-        w=omega0;
 
     }
 return 0;
 }
+
