@@ -100,29 +100,28 @@ void analisis (double alpha, double theta0, double w0, double epsilon, double &t
       }
 }
 
-void rungekutta (double aplha, double &w, double &thetaT, double delta){
+void rungekutta (double aplha, double delta, double &w, double &theta ){
 
-double  thetaA; thetaB; thetaC; thetaD; wA; wB; wC; wD;
+double  thetaA, thetaB, thetaC, thetaD, wA, wB, wC, wD;
 
   thetaA=w*delta;
-  wA=-alpha*sin(thetaT)*delta;
+  wA=-alpha*sin(theta)*delta;
   
   thetaB=(w+wA/2)*delta;
-  WB=-alpha*sin(thetaT+thetaA/2)*delta;
+  WB=-alpha*sin(theta+thetaA/2)*delta;
   
-  thetac=(w+wB/2)*delta;
-  wC=-alpha*sin(thetaT+thetaB/2)*delta;
+  thetaC=(w+wB/2)*delta;
+  wC=-alpha*sin(theta+thetaB/2)*delta;
   
   thetaD=(w+wC)*delta;
-  wD=-alpha*sin(thetaT+thetaC)*delta;//Tiene pinta de bucle porque he hechocopiar y pegar veces y luego cambiar algo,pero nose como
+  wD=-alpha*sin(theta+thetaC)*delta;
   
-  
-  thetaT=thetaT+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
+  theta=theta+thetaA/6+,thetaB/3+thetaC/3+thetaD/6;
   w=w+wA/6+wB/3+wC/3+wD/6;
   }
   
 int main(){
-double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, k, td, tcout, tsimul, epsilon=pow(10,-7);
+double fd, fcout, fsimul, theta0, theta_0, theta, omega0, omega_0, w, alpha, thetaM, tau, k, td, tcout, tsimul, epsilon=pow(10,-7);
     char utheta, uomega;
     cin>>fd>>fcout>>fsimul>>theta_0>>utheta>>omega_0>>uomega>>alpha;
     
@@ -140,6 +139,8 @@ double fd, fcout, fsimul, theta0, theta_0, omega0, omega_0, alpha, thetaM, tau, 
         tcout=fd*tau;
         tsimul=fsimul*tau;
         //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
+        theta=theta0;
+        w=omega0;
 
     }
 return 0;
