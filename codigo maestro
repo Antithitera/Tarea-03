@@ -43,8 +43,8 @@ return theta-2*n*pi;
 }
 
 void analisis (double alpha, double theta, double w, double epsilon, double &thetaM, double &tau, int &k){
-    double T0, r, Prc, an, anmas, acum, term, C;
-    if(pow(w,2)/(2*alpha)-cos(theta)<1){
+    double T0, r, Prc, an, anmas, acum, term, C, thetaprima, mgl=pow(w,2)/(2*alpha)-cos(theta);
+    if(mgl<1){
           k=-1;
 
           thetaM=acos(cos(theta))-pow(w,2)/(2*alpha);
@@ -55,7 +55,7 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
           tau=T0;
           acum=1;
           an=1;
-          for(int i=1;i>=Prc;i++){
+          for(int i=1;i<=Prc;i++){
             term=(2*i-1)*r/(2*i);
             anmas=pow(term,2)*an;
             an=anmas;
@@ -63,15 +63,16 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
           }
           tau=T0*acum;
       }
-      else if(pow(w,2)/(2*alpha)-cos(theta)==1){
+      else if(mgl==1){
           k=0;
 
-          C=1/tan(theta/4+pi/4);
-          tau=1/sqrt(alpha)*log(C*tan(theta/4+pi/4));
-          if (w<0){
-            tau=-tau;
-            thetaM=-pi;}
+          if (w<0)  thetaM=-pi;
           else thetaM=pi;
+          C=1/tan(theta/4+pi/4);
+          thetaprima=0.999*thetaM;
+          tau=1/sqrt(alpha)*log(C*tan(thetaprima/4+pi/4));
+          if(w<0) tau=-tau;
+
       }
 
      else{
@@ -87,7 +88,7 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
           acum=1;
           an=1;
 
-             for(int i=1;i>=Prc;i++){
+             for(int i=1;i<=Prc;i++){
                 term=(2*i-1)*r/(2*i);
                 anmas=((pow(term,2))*an);
                 an=anmas;
@@ -111,7 +112,6 @@ double  thetaA, thetaB, thetaC, thetaD, wA, wB, wC, wD;
 
   thetaD=(w+wC)*delta;
   wD=-alpha*sin(theta+thetaC)*delta;
-
 
   theta=theta+thetaA/6+thetaB/3+thetaC/3+thetaD/6;
   w=w+wA/6+wB/3+wC/3+wD/6;
@@ -162,8 +162,8 @@ int main(){
         cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<endl;
         i=0;
         }
-
-        }
+       }
+    }
 return 0;
 }
-}
+
