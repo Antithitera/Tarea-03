@@ -83,7 +83,7 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
 
           T0=pi/A;
           r=sqrt(alpha)/A;
-          Prc=log(epsilon*(1-pow(r,2)))/2*log(r);
+          Prc=log(epsilon*(1-pow(r,2)))/2/log(r);
           tau=T0;
           acum=1;
           an=1;
