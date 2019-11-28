@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <stdio.h>
 using namespace std;
 
 /*
@@ -42,16 +43,15 @@ double normaliza (double theta){
 return theta-2*n*pi;
 }
 
-void analisis (double alpha, double theta, double w, double epsilon, double &thetaM, double &tau, int &k){
-    double T0, r, Prc, an, anmas, acum, term, C, thetaprima, mgl=pow(w,2)/(2*alpha)-cos(theta);
+void analisis (double alpha, double theta, double w, double epsilon, double &thetaM, double &tau, int &k, double &mgl){
+    double T0, r, Prc, an, anmas, acum, term, C, thetaprima;
     if(mgl<1){
           k=-1;
 
-          thetaM=acos(cos(theta))-pow(w,2)/(2*alpha);
-
+          thetaM=acos(cos(theta)-pow(w,2)/(2*alpha));
           T0=2*pi/sqrt(alpha);
           r=sin(thetaM/2);
-          Prc=log(epsilon*(1-pow(r,2)))/2*log(r);
+          Prc=log(epsilon*(1-pow(r,2)))/(2*log(r));
           tau=T0;
           acum=1;
           an=1;
@@ -62,6 +62,7 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
             acum=acum+anmas ;
           }
           tau=T0*acum;
+
       }
       else if(mgl==1){
           k=0;
@@ -72,11 +73,10 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
           thetaprima=0.999*thetaM;
           tau=1/sqrt(alpha)*log(C*tan(thetaprima/4+pi/4));
           if(w<0) tau=-tau;
-
       }
 
      else{
-          double A=sqrt(pow(w,2))+2*alpha*(1-cos(theta))/2;
+          double A=sqrt(pow(w,2)+2*alpha*(1-cos(theta)))/2;
           k=1;
 
           thetaM=pi;
@@ -88,12 +88,12 @@ void analisis (double alpha, double theta, double w, double epsilon, double &the
           acum=1;
           an=1;
 
-             for(int i=1;i<=Prc;i++){
-                term=(2*i-1)*r/(2*i);
-                anmas=((pow(term,2))*an);
-                an=anmas;
-                acum=acum+anmas ;
-             }
+        for(int i=1;i<=Prc;i++){
+            term=(2*i-1)*r/(2*i);
+            anmas=((pow(term,2))*an);
+            an=anmas;
+            acum=acum+anmas ;
+        }
              tau=T0*acum;
       }
 }
@@ -118,7 +118,7 @@ double  thetaA, thetaB, thetaC, thetaD, wA, wB, wC, wD;
   }
 
 int main(){
-    double fd, fcout, fsimul, theta_0, theta, omega_0, w, alpha, thetaM, phi0, tau, td, tcout, tsimul, t=0, i=0, epsilon=pow(10,-7);
+    double fd, fcout, fsimul, theta_0, theta, omega_0, w, alpha, thetaM, phi0, tau, td, tcout, tsimul, t=0, i=0, epsilon=pow(10,-7),mgl=pow(w,2)/(2*alpha)-cos(theta);
     int k;
     char utheta, uomega;
     bool b;
@@ -131,25 +131,25 @@ int main(){
     //Mensaje de error si alguna unidad está mal
     if (alpha<=0||fd<=0||fcout<=0||fsimul<=0||b==false)   cout << "HAY ALGÚN ERROR";
     else {
-        analisis(alpha,theta,w,epsilon,thetaM,tau,k);
+        analisis(alpha,theta,w,epsilon,thetaM,tau,k,mgl);
         //Calculamos los tiempos representativos del péndulo gracias a la tau que calcula el subalgoritmo analisis
         td=fd*tau;
         tcout=fcout*tau;
         tsimul=fsimul*tau;
-        cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<endl;//Mostraos las condiciones iniciales
+        printf("%10g\t%10g\t%10g\n",t,normaliza(theta),w); //Mostraos las condiciones iniciales
 
         //Usamos RungeKutta para calcular theta y omega para sucesivos tiempos hasta t=tsimul
         fase(theta, w, phi0);//Nos devuelve un phi0 que lo usaremos en el caso especial para calcular thetaseno
 
-        if (pow(w,2)/(2*alpha)-cos(theta)<1){//Calculamos un caso especial, en el que hay que mostar además otro ángulo
+        if (mgl<1){//Calculamos un caso especial, en el que hay que mostar además otro ángulo
             double thetaseno;
             while(t<=tsimul){
                 for (i;i<tcout;i=i+td){
                 rungekutta(alpha, w, theta, td);
-                thetaseno=thetaM*(2*pi*t/tau+phi0);//Aquí hay que usar fase() pero no estoy seguro de si así
+                thetaseno=thetaM*sin(2*pi*t/tau+phi0);//Aquí hay que usar fase() pero no estoy seguro de si así
                 t=t+td;
                 }
-            cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<"\t"<<thetaseno<<endl;
+            printf("%10g\t%10g\t%10g\t%10g\n",t,normaliza(theta),w,normaliza(thetaseno));
             i=0;
             }
         }
@@ -159,12 +159,13 @@ int main(){
             rungekutta(alpha, w, theta, td);
             t=t+td;
             }
-        cout<<t<<"\t"<<normaliza(theta)<<"\t"<<w<<endl;
+        printf("%10g\t%10g\t%10g\n",t,normaliza(theta),w);
         i=0;
         }
        }
     }
 return 0;
 }
+
 
 
